@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD for Mobile App
 
 on:
   push:
@@ -9,36 +9,60 @@ on:
       - main
 
 jobs:
-  build:
+  build-android:
+    name: Build Android APK
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the repository
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Setup Node.js
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '10.2.3' # Replace with the version of Node.js you use
+        node-version: '16' # Adjust based on your project
 
-    # Install dependencies
     - name: Install dependencies
       run: npm install
 
-    # Run tests
-    - name: Run tests
-      run: npm test
+    - name: Build APK
+      run: |
+        cd android
+        ./gradlew assembleRelease
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-release.apk
+        path: android/app/build/outputs/apk/release/app-release.apk
+
+  build-ios:
+    name: Build iOS App
+    runs-on: macos-latest # macOS is required for iOS builds
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Deploy to server
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install CocoaPods
+      run: pod install --project-directory=ios
+
+    - name: Build IPA
       run: |
+        cd ios
+        xcodebuild -workspace YourApp.xcworkspace -scheme YourApp -sdk iphoneos -configuration Release archive -archivePath $PWD/build/YourApp.xcarchive
+        xcodebuild -exportArchive -archivePath $PWD/build/YourApp.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build/
+
+    - name: Upload IPA
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-release.ipa
+        path: ios/build/YourApp.ipa
