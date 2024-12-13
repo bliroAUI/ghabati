@@ -20,12 +20,6 @@ jobs:
         distribution: 'zulu'
         java-version: '11'
 
-    - name: Set up Android SDK
-      uses: android-actions/setup-android@v2
-      with:
-        api-level: 31
-        build-tools: 31.0.0
-
     - name: Install dependencies
       run: npm install
 
@@ -50,4 +44,3 @@ jobs:
       run: |
         cd ios
         xcodebuild -workspace YourApp.xcworkspace -scheme YourApp -sdk iphoneos -configuration Release archive -archivePath $PWD/build/YourApp.xcarchive
-        xcodebuild -exportArchive -archivePath $PWD/build/YourApp.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build/
