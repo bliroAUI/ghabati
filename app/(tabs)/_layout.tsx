@@ -1,59 +1,82 @@
 import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
-
+import { Tabs } from 'expo-router';
+import { FontAwesome } from '@expo/vector-icons';
+import MapScreen from './mapScreen';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+    return (
+        <Tabs
+            screenOptions={{
+                tabBarStyle: {
+                    backgroundColor: '#fff', // Optional: Tab bar background color
+                    justifyContent: 'center', // Centers the items vertically
+                    alignItems: 'center', // Centers the items horizontally
+                    paddingBottom: 5, // Add padding for spacing
+                    paddingTop: 5, // Add padding for spacing
+                    height: 60, // Adjust height for proper alignment
+                },
+                tabBarLabelStyle: {
+                    fontSize: 12, // Adjust label size
+                    fontWeight: '600', // Make label bold
+                    textAlign: 'center', // Align text to center
+                },
+                tabBarIconStyle: {
+                    justifyContent: 'center', // Center icons
+                    alignItems: 'center', // Center icons
+                },
+            }}
+        >
+            <Tabs.Screen
+                name="index"
+                options={{
+                    title: 'Dashboard',
+                    tabBarIcon: ({ color }) => <FontAwesome name="tree" size={24} color={color} />,
+                }}
+            />
+            <Tabs.Screen
+                name="alerts"
+                options={{
+                    title: 'Alerts',
+                    tabBarIcon: ({ color }) => <FontAwesome name="exclamation-circle" size={24} color={color} />,
+                }}
+            />
+            <Tabs.Screen
+                name="newDataInput"
+                options={{
+                    title: 'Data Input',
+                    tabBarIcon: ({ color }) => <FontAwesome name="pencil" size={24} color={color} />,
+                }}
+            />
+            <Tabs.Screen
+                name="analytics"
+                options={{
+                    title: 'Analytics',
+                    tabBarIcon: ({ color }) => <FontAwesome name="bar-chart" size={24} color={color} />,
+                }}
+            />
+            <Tabs.Screen
+                name="data"
+                options={{
+                    tabBarButton: () => null, // Hides the tab
+                }}
+            />
+            <Tabs.Screen
+                name="dataHistory"
+                options={{
+                    tabBarButton: () => null, // Hides the tab
+                }}
+            />
+            <Tabs.Screen
+              name="mapScreen"
+              options={{
+                title: "Map",
+                tabBarIcon: ({ color }) => <FontAwesome name="map" size={24} color={color} />,
+              }}
+            />
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+        </Tabs>
+        
+    );
 }

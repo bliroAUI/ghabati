@@ -1,14 +1,34 @@
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import Colors from '@/constants/Colors';
+import { useNavigation } from '@react-navigation/native';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+export default function DashboardScreen() {
+  const navigation = useNavigation(); // Use the hook to get navigation
 
-export default function TabOneScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <Text style={styles.header}>Ghabati Dashboard</Text>
+      <View style={styles.statCard}>
+        <Text style={styles.statLabel}>Overall Health</Text>
+        <Text style={styles.statValue}>85%</Text>
+      </View>
+      <View style={styles.statCard}>
+        <Text style={styles.statLabel}>Total Alerts</Text>
+        <Text style={styles.statValue}>3</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="View Alerts"
+          color={Colors.light.primary}
+          onPress={() => navigation.navigate('alerts')} // Navigate to the Alerts tab
+        />
+        <Button
+          title="Add Data"
+          color={Colors.light.secondary}
+          onPress={() => alert('Navigate to Add Data screen')} // Replace with navigation if needed
+        />
+      </View>
     </View>
   );
 }
@@ -16,16 +36,40 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#F5F5F5',
+    padding: 20,
   },
-  title: {
-    fontSize: 20,
+  header: {
+    fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#2E7D32',
+    textAlign: 'center',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  statCard: {
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    alignItems: 'center',
+  },
+  statLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#555',
+  },
+  statValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2E7D32',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
   },
 });
